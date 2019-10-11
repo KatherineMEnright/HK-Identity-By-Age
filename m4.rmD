@@ -69,6 +69,8 @@ avg_by_age <-  function(.x) {
   filter(agegp == .x) %>%
   summarise(avg=mean(Q002I))
 }
+
+#I might also consider comparing the results of this identity index over time.
 ```
 
  One common assumption, especially with regards to the current protests, is that the younger generation in Hong Kong have a stronger unique Hong Kong identity as opposed to Chinese identity. The data displayed here in this graph questions that assumption, and shows a fairly consistent high percentage of identification with Hong Kong identity across age groups. The next step of my analysis will be to compare this "Identity Index of Being a Hong Konger" (Q002I) with the "Identity index of being a Chinese citizen" (Q003I).
