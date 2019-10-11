@@ -1,0 +1,19 @@
+---
+title: "Milestone 4"
+author: "Katherine Enright"
+date: "10/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library("csvy")
+```
+
+```{r read_data}
+#I installed the csvy package to read in this file
+identity_data <- read_csvy("raw-data/TP190602_EI_final_v1_POP.csvy")
+#In the result tibble, the columnn names are listed as "Q001", "Q002A" etc; I need to figure out which questions in the survey these correspond to.
+```
+
