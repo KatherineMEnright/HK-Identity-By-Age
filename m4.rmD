@@ -33,42 +33,46 @@ yaml_data <- get_yaml_header("raw-data/TP190602_EI_final_v1_POP.csvy")
 ```{r initial_plot}
 #My goal here is to plot the variable "strength of identity as a Hongkonger" against the age of the participants. One common assumption is that the younger generation in Hong Kong have a stronger unique Hong Kong as opposed to Chinese identity: does the data hold up?
 
-#Question name: Q002A
-#title:"Please use a scale of 0-10 to rate your strength of identity as a Hongkonger, with 10 indicating extremely strong, 0 indicating extremely weak, and 5 indicating half-half"
-#Labels: Refuse to answer: -99.0                                                               Don't know / hard to say: 8888.0
+#I chose to use question Q002I as it is an index that combines the values for the two questions on HK identity— "please use a scale of 0-10 to rate your strength of identity as a Hongkonger"(Q002A) and "Please use a scale of 0-10 to rate your importance as a Hongkonger" (Q002B).
 
+#I think a boxplot would be the best way to display this data, as I have discrete x variables (age ranges) and the boxplot will show the distribution of answers by age range.
 
-#title: Age group"                                                                       #  labels:"                                                                                   
-#    Refuse to answer: -99.0"                                                                 
-#    18-29: 1.0"                                                                              
-#    30-39: 2.0"                                                                              
-#    40-49: 3.0"                                                                              
-#    50-59: 4.0"                                                                              
-#    60-69: 5.0"                                                                              
- #   70 or above: 6.0"                                                                        
-#I think a boxplot would be the best way to display this data.
-# Convert the variablefrom a numeric to a factor variable
+#Converted the variablefrom a numeric to a factor variable
 
 identity_data$agegp <- as.factor(identity_data$agegp)
 
-plot_data <- identity_data %>% 
-  select(Q002A, agegp) %>% 
-  filter(Q002A != "8888",agegp %in% 1:6)
+plot_data <- identity_data %>%
+  select(Q002I, agegp) %>%
+  filter(Q002I != "8888", agegp %in% 1:6)
 
 ggplot(plot_data,
-       aes(x=agegp, y=Q002A, alpha=0.3), group=agegp) +
-      geom_boxplot(alpha=0.3,fill="light blue") +
-      labs(title = "Strength of Identity as Hong Konger by Age Group", 
-           x= "Age group",
-           y= "Srength of Identity") +
-  geom_jitter(shape=16, position=position_jitter(0.3), alpha=0.5, color="blue")
+  aes(x = agegp, y = Q002I, alpha = 0.3),
+  group = agegp
+) +
+  geom_boxplot(alpha = 0.1, fill = "blue") +
+  labs(
+    title = "Identity Index of Being a Hong Konger by Age Group",
+    x = "Age group",
+    y = "Strength of Identity"
+  ) +
+  geom_jitter(shape = 16, position = position_jitter(0.4), alpha = 0.5, color = "blue") +
+  scale_x_discrete(labels = c("18-29", "30-39", "40-49", "50-59", "60-69", "70 or above"))
+#Change the X axis labels so they reflect the actual age ranges
 
 #There was an uneven number of responses across the age groups; should I use a weight to account for this?
-age_distro <- plot_data %>% count(agegp)
+age_distro <- plot_data %>%
+              count(agegp)
 
-#my results seemed suspicous, so I'm going to create a function to compare the average identity score across age groups
+#my results didn't match my hypothesis, so I'm going to create a function to compare the average identity score across age groups. On second glance, the data checks out.
 avg_by_age <-  function(.x) {
-  plot_data %>% filter(agegp == .x) %>% summarise(avg=mean(Q002A))
+  plot_data %>% 
+  filter(agegp == .x) %>%
+  summarise(avg=mean(Q002I))
 }
 ```
 
+ One common assumption, especially with regards to the current protests, is that the younger generation in Hong Kong have a stronger unique Hong Kong identity as opposed to Chinese identity. The data displayed here in this graph questions that assumption, and shows a fairly consistent high percentage of identification with Hong Kong identity across age groups. The next step of my analysis will be to compare this "Identity Index of Being a Hong Konger" (Q002I) with the "Identity index of being a Chinese citizen" (Q003I).
+ 
+I chose to plot the results of question Q002I in this box plot as it is an index that combines the values for the two questions on HK identity— "please use a scale of 0-10 to rate your strength of identity as a Hongkonger"(Q002A) and "Please use a scale of 0-10 to rate your importance as a Hongkonger" (Q002B).
+
+Source: Survey of Nationality and Identity in Hong Kong, Public Opinion Programme, The University of Hong Kong
